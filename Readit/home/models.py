@@ -5,7 +5,7 @@ from django.db.models.deletion import CASCADE
 class User(models.Model):
     name = models.CharField(max_length = 200)
     email = models.EmailField(unique = True)
-    password = models.CharField(max_length=50,unique = True)
+    password = models.CharField(max_length=50)
     profile_image = models.ImageField(upload_to = 'static/photos',blank=True)
     class Meta:
         verbose_name = 'User'
