@@ -22,7 +22,12 @@ def load_up_sign_in(request):
         try:
             user = User.objects.get(email = user_email)
             if user.password == user_password:
-                return HttpResponse("Success")
+                if user.profile_image:
+                    return HttpResponse("Success")
+                else: 
+                    return render(request,"home/index_profile.html",{
+                        "id" : user.id
+                    })
             else:
                 return render(request,'home/index.html',{
                             'error' : True,
@@ -46,7 +51,7 @@ def load_up_sign_up(request):
         main_object = request.POST
         try:
             if main_object['pswd'] == main_object['cnfrmpswd']:
-                User.objects.create(name=main_object['txt'],email=main_object['email'], password=main_object['pswd'])
+                user = User.objects.create(name=main_object['txt'],email=main_object['email'], password=main_object['pswd'])
             else:
                 return render(request,'home/index.html',{
                             'error' : True,
@@ -55,7 +60,9 @@ def load_up_sign_up(request):
                             'password_match' : True,
                             'not_registered' : False
                         })
-            return render(request,"home/index_profile.html")
+            return render(request,"home/index_profile.html",{
+                'id' : user.id
+            })
         except:
             return render(request,'home/index.html',{
                     'error' : True,
@@ -69,4 +76,11 @@ def home(request):
     pass
 
 def image(request):
-    return render(request,"home/index_profile.html")
+    if request.method == 'POST':
+        id_no = request.POST['id']
+        try:
+            skip_button = request.POST['skip_']
+            return HttpResponse("You skipped it")
+        except:
+            photo_added = request.POST['file_']
+            return HttpResponse("You just added photo")

@@ -12,13 +12,22 @@
 <h1>Upload Photo</h1>
 
 <div class="profile-pic-div">
-  <img src="{% static "home/image_profile.png" %}" id="photo">
-  <input type="file" id="file">
-  <label for="file" id="uploadBtn">Choose Photo</label>
+  <form action={% url 'profile-image' %} method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <img src="image profile.png" id="photo">
+    <input type="file" name='file_' id="file" required=''>
+    <input type='hidden' name='id' value={{id}}>
+    <label for="file" id="uploadBtn">Choose Photo</label>
+    <button type ='submit' for='file' >NEXT</button>
+  </form>
   
 </div>
-<button type = 'submit' >NEXT</button>
+<form action={% url 'profile-image' %} method="POST" enctype="multipart/form-data">
+{% csrf_token %}
+<input type="hidden" name="skip_" id="skip">
+<input type='hidden' name='id' value={{id}}>
 <button type = 'submit'>SKIP</button>
+</form>
 
 <script src="{% static "home/java_profile.js" %}"></script>
 

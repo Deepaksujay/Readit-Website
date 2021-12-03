@@ -6,7 +6,7 @@ class User(models.Model):
     name = models.CharField(max_length = 200)
     email = models.EmailField(unique = True)
     password = models.CharField(max_length=50)
-    profile_image = models.ImageField(upload_to = 'static/photos',blank=True)
+    profile_image = models.ImageField(upload_to = 'profile_pics',blank=True)
     class Meta:
         verbose_name = 'User'
         verbose_name_plural = 'Users' 
