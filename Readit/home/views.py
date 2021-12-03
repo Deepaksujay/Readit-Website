@@ -55,7 +55,7 @@ def load_up_sign_up(request):
                             'password_match' : True,
                             'not_registered' : False
                         })
-            return HttpResponse("Success")
+            return render(request,"home/index_profile.html")
         except:
             return render(request,'home/index.html',{
                     'error' : True,
@@ -67,3 +67,6 @@ def load_up_sign_up(request):
 
 def home(request):
     pass
+
+def image(request):
+    return render(request,"home/index_profile.html")
