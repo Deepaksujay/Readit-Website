@@ -1,7 +1,7 @@
 from django.contrib import admin
-#username = readit_name
+#username = readit_team
 #Email address: readit_team@gmail.com
-#password = readit_name
+#password = readit_team
 # Register your models here.
 from .models import User,Question,Answer
 

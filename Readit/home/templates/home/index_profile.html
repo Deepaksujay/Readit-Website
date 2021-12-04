@@ -5,26 +5,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Upload profile picture</title>
-  <link rel="stylesheet" href="{% static "home/styleprofile.css" %}">
+  <link rel="stylesheet" href="{% static "home/#styleprofile.css" %}">
 </head>
 <body>
 
 <h1>Upload Photo</h1>
 
 <div class="profile-pic-div">
-  <form action={% url 'profile-image' %} method="POST" enctype="multipart/form-data">
+  <form action={% url 'start-up' %} method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <img src="image profile.png" id="photo">
     <input type="file" name='file_' id="file" required=''>
+    <input type="hidden" name="select" id="skip" value='select_0#21'>
     <input type='hidden' name='id' value={{id}}>
     <label for="file" id="uploadBtn">Choose Photo</label>
     <button type ='submit' for='file' >NEXT</button>
   </form>
   
 </div>
-<form action={% url 'profile-image' %} method="POST" enctype="multipart/form-data">
+<form action={% url 'start-up' %} method="POST" enctype="multipart/form-data">
 {% csrf_token %}
-<input type="hidden" name="skip_" id="skip">
+<input type="hidden" name="select" id="skip" value='select_0#22'>
 <input type='hidden' name='id' value={{id}}>
 <button type = 'submit'>SKIP</button>
 </form>

@@ -1,3 +1,4 @@
+from django.http.request import RAISE_ERROR
 from django.http.response import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -6,6 +7,23 @@ from . models import User ,Question, Answer
 
 # Create your views here.
 def start_up(request):
+    if request.method == 'POST':
+        try:
+            recieved_data = request.POST
+            id_no = recieved_data['id']
+            select = recieved_data['select']
+            if select == 'select_0#22':
+                return HttpResponse("You skipped it")
+            if select == 'select_0#21':
+                photo_added = request.FILES['file_']
+                user = User.objects.get(id = int(id_no))
+                user.profile_image = photo_added
+                user.save()
+                text = "You just added photo" + ' ' + user.name
+                return HttpResponse(text)
+        except:
+            return HttpResponse("Something is wrong")
+
     return render(request,'home/index.html',{
                 'error' : False,
                 'already_registered' : False,
@@ -75,12 +93,3 @@ def load_up_sign_up(request):
 def home(request):
     pass
 
-def image(request):
-    if request.method == 'POST':
-        id_no = request.POST['id']
-        try:
-            skip_button = request.POST['skip_']
-            return HttpResponse("You skipped it")
-        except:
-            photo_added = request.POST['file_']
-            return HttpResponse("You just added photo")
