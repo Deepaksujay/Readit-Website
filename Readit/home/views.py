@@ -14,14 +14,17 @@ def start_up(request):
             id_no = recieved_data['id']
             select = recieved_data['select']
             if select == 'select_0#22':
-                return HttpResponse("You skipped it")
+                return render(request,'home/home.html',{
+                    'id' : id_no
+                })
             if select == 'select_0#21':
                 photo_added = request.FILES['file_']
                 user = User.objects.get(id = int(id_no))
                 user.profile_image = photo_added
                 user.save()
-                text = "You just added photo" + ' ' + user.name
-                return HttpResponse(text)
+                return render(request,'home/home.html',{
+                    'id' : id_no
+                })
         except:
             return HttpResponse("Something is wrong")
 
@@ -42,7 +45,9 @@ def load_up_sign_in(request):
             user = User.objects.get(email = user_email)
             if user.password == user_password:
                 if user.profile_image:
-                    return HttpResponse("Success")
+                    return render(request,'home/home.html',{
+                        'id' : user.id
+                    })
                 else: 
                     return render(request,"home/index_profile.html",{
                         "id" : user.id
@@ -91,6 +96,14 @@ def load_up_sign_up(request):
                     'password_match' : False,
                     'not_registered' : False
                     })
+
+def contact_us(request):
+    if request.method == 'POST':
+        id_no = request.POST['id']
+        user = User.objects.get(id = int(id_no))
+        return render(request,'home/contact_us.html',{
+            'user' : user
+        })
 
 def home(request):
     return render(request,'home/home.html')

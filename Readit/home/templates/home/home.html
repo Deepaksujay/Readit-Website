@@ -34,7 +34,12 @@
 					<ul class="navbar-nav ml-auto">
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="#">Home</a>
+							<form action='#' method="POST" enctype="multipart/form-data">
+							{% comment %} <a class="nav-link" href="#">Home</a> {% endcomment %}
+							{% csrf_token %}
+							<input type='hidden' name='id' value={{id}}>
+							<button type='submit' class='nav-link'>Home</button>
+							</form>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" href="#">AboutUs</a>
@@ -43,7 +48,12 @@
 							<a class="nav-link" href="#">Myprofile</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="#">ContactUs</a>
+							<form action='{% url 'contact-us' %}' method="POST" enctype="multipart/form-data">
+							{% comment %} <a class="nav-link" href="contact_us.html">ContactUs</a> {% endcomment %}
+							{% csrf_token %}
+							<input type='hidden' name='id' value={{id}}>
+							<button type='submit' class='nav-link'>Contact Us</button>
+							</form>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" href="#">Logout</a>

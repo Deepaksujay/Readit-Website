@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>contact form</title>
+</head>
+
+<body>
+
+<link href="style_contact.css" rel="stylesheet">
+
+<div class="body">
+
+    <div id="head">
+    <h3 class="main_head">Contact us</h3>
+
+    <form id="form_id" class="form_class" method="post" action="#">
+        {% csrf_token %}
+        
+        <div class="subhead">
+            <label for="Name" class="label">Your name</label>
+            <div class="subhead_input">
+                <input type="text" value={{ user.name }} id="Name" name="Name" class="form_control" placeholder="Name" required>
+            </div>
+        </div>
+
+        <div class="subhead">
+            <label for="Email" class="label">Your email address</label>
+            <div class="subhead_input">
+                <input type="email" value={{ user.email }} id="Email" name="Email" placeholder="Email" class="form_control" required>
+            </div>
+        </div>
+
+        <div class="subhead">
+            <label for="Message" class="label">Your message</label>
+            <div class="subhead_input">
+                <textarea id="Message" name="Message" class="form_control" placeholder="Enter message.." rows="10" maxlength="4000" required></textarea>
+            </div>
+        </div>
+
+        <div class="subhead">
+            <button type="submit" id="button" class="btn btn-primary btn-lg btn-block">Send Message</button>
+        </div>
+
+        
+
+    </form>
+    </div>
+
+</div>
+
+</body>
+</html>
