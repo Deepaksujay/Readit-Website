@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from . models import User ,Question, Answer
 
+user = None
 # Create your views here.
 def start_up(request):
     if request.method == 'POST':
@@ -63,13 +64,14 @@ def load_up_sign_in(request):
                         'not_registered' : True
                     })
 
-
 def load_up_sign_up(request):
     if request.method == 'POST':
         main_object = request.POST
         try:
             if main_object['pswd'] == main_object['cnfrmpswd']:
-                user = User.objects.create(name=main_object['txt'],email=main_object['email'], password=main_object['pswd'])
+                email = main_object['email']
+                email = email.lower()
+                user = User.objects.create(name=main_object['txt'],email=email, password=main_object['pswd'])
             else:
                 return render(request,'home/index.html',{
                             'error' : True,
@@ -91,5 +93,5 @@ def load_up_sign_up(request):
                     })
 
 def home(request):
-    pass
+    return render(request,'home/home.html')
 
