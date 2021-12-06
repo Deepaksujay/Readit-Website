@@ -13,9 +13,11 @@ def start_up(request):
             recieved_data = request.POST
             id_no = recieved_data['id']
             select = recieved_data['select']
+            user = User.objects.get(id = id_no)
             if select == 'select_0#22':
                 return render(request,'home/home.html',{
-                    'id' : id_no
+                    'id' : id_no,
+                    'user' : user
                 })
             if select == 'select_0#21':
                 photo_added = request.FILES['file_']
@@ -23,7 +25,8 @@ def start_up(request):
                 user.profile_image = photo_added
                 user.save()
                 return render(request,'home/home.html',{
-                    'id' : id_no
+                    'id' : id_no,
+                    'user' : user
                 })
         except:
             return HttpResponse("Something is wrong")
@@ -46,11 +49,13 @@ def load_up_sign_in(request):
             if user.password == user_password:
                 if user.profile_image:
                     return render(request,'home/home.html',{
-                        'id' : user.id
+                        'id' : user.id,
+                        'user' : user
                     })
                 else: 
                     return render(request,"home/index_profile.html",{
-                        "id" : user.id
+                        "id" : user.id,
+                        'user' : user
                     })
             else:
                 return render(request,'home/index.html',{
@@ -86,7 +91,8 @@ def load_up_sign_up(request):
                             'not_registered' : False
                         })
             return render(request,"home/index_profile.html",{
-                'id' : user.id
+                'id' : user.id,
+                'user' : user
             })
         except:
             return render(request,'home/index.html',{
@@ -106,5 +112,9 @@ def contact_us(request):
         })
 
 def home(request):
+    if request.method == 'POST':
+        input_object = request.POST
+        if input_object['select'] == 'select#@contact@us':
+            return HttpResponse("We recieved your feedback!") 
     return render(request,'home/home.html')
 

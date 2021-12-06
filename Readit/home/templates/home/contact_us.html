@@ -14,20 +14,20 @@
     <div id="head">
     <h3 class="main_head">Contact us</h3>
 
-    <form id="form_id" class="form_class" method="post" action="#">
+    <form id="form_id" class="form_class" method="post" action={% url 'home' %}>
         {% csrf_token %}
-        
+        <input type='hidden' name='select' value='select#@contact@us'>
         <div class="subhead">
             <label for="Name" class="label">Your name</label>
             <div class="subhead_input">
-                <input type="text" value={{ user.name }} id="Name" name="Name" class="form_control" placeholder="Name" required>
+                <input type="text" value={{ user.name }} id="Name" name="Name" class="form_control" placeholder="Name" required readonly>
             </div>
         </div>
 
         <div class="subhead">
             <label for="Email" class="label">Your email address</label>
             <div class="subhead_input">
-                <input type="email" value={{ user.email }} id="Email" name="Email" placeholder="Email" class="form_control" required>
+                <input type="email" value={{ user.email }} id="Email" name="Email" placeholder="Email" class="form_control" required readonly>
             </div>
         </div>
 
