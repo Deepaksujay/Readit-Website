@@ -18,6 +18,7 @@
     <form id="form_id" class="form_class" method="post" action={% url 'home' %}>
         {% csrf_token %}
         <input type='hidden' name='select' value='select#@contact@us'>
+        <input type='hidden' value={{id}} name='id'>
         <div class="subhead">
             <label for="Name" class="label">Your name</label>
             <div class="subhead_input">

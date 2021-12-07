@@ -108,13 +108,36 @@ def contact_us(request):
         id_no = request.POST['id']
         user = User.objects.get(id = int(id_no))
         return render(request,'home/contact_us.html',{
+            'user' : user,
+            'id' : id_no
+        })
+
+def about_us(request):
+    if request.method == 'POST':
+        id_no = request.POST['id']
+        return render(request,'home/about_us.html',{
+            'id' : id_no
+        })
+
+def my_profile(request):
+    if request.method == 'POST':
+        id_no = request.POST['id']
+        user = User.objects.get(id = int(id_no))
+        return render(request,'home/my_profile.html',{
+            'id' : id_no,
             'user' : user
         })
 
 def home(request):
     if request.method == 'POST':
         input_object = request.POST
+        id_no = input_object['id']
         if input_object['select'] == 'select#@contact@us':
-            return HttpResponse("We recieved your feedback!") 
-    return render(request,'home/home.html')
+            return HttpResponse("We recieved your feedback!")
+        if input_object['select'] == 'select#@home@page' :
+            return render(request,'home/home.html',{
+                'id' : id_no,
+                'user' : user
+            })
+    
 
