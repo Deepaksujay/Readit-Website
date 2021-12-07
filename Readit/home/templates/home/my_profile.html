@@ -31,6 +31,7 @@
                                 {% if user.profile_image %}
                                     <img src="{{ user.profile_image.url }}" id="photo" class="rounded-circle" width="150">
                                 {% else %}
+                                    <img src="{% static 'home/profile_default.jpg' %}" id="photo" class="rounded-circle" width="150">
                                     <input type="file" id="file">
                                     <label for="file" id="photoBtn">Choose photo</label>
                                 {% endif %}
@@ -75,6 +76,9 @@
                       </div>
                       <div class="col-md-3">
                         <a >Questions</a>
+                        {% if not user.question.all %}
+                        <br>You haven't posted any Question yet:(
+                        {% endif %}
                         {% for Question in user.questions.all %}
                          <li>
                              {{Question.question}}
