@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models.deletion import CASCADE
+from django.db.models.deletion import CASCADE, RESTRICT
 from django.db.models.fields import related
 
 # Create your models here.
@@ -14,12 +14,19 @@ class User(models.Model):
     def __str__(self):
         return self.name
 
+class Category(models.Model):
+    category = models.CharField(max_length=50)
+    class Meta:
+        verbose_name = 'Category'
+        verbose_name_plural = 'Categories' 
+    def __str__(self):
+        return self.category
 class Question(models.Model):
     question = models.TextField(blank=False)
     time = models.TimeField()
     date = models.DateField()
     likes = models.ManyToManyField(User,default = None,related_name='q_likes')
-    dislikes = models.ManyToManyField(User,default = None,related_name='q_dislikes')
+    category = models.ForeignKey(Category,default = None,on_delete=RESTRICT,blank=True,related_name='questions')
     author = models.ForeignKey(User,on_delete=CASCADE,null=False,blank=False,related_name = 'questions')
     class Meta:
         verbose_name = 'Question'

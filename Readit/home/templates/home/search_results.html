@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Results</title>
+  <link rel="stylesheet" href='#'>
+</head>
+<body>
+    {% include "./nav_bar.html" %}
+
+    {% if users %}
+    <ul>
+        {% for user in users %}
+        <li>
+        <form action={% url 'search-results' %} method="POST" enctype="multipart/form-data" %}>
+            {% csrf_token %}
+            <input type='hidden' value={{id}} name='id'>
+            <input type='hidden' value={{user.id}} name='user_id'>
+            <input type='hidden' name='select' value='select#@search@result'>
+            <button type='submit'>{{user.name}}</button>
+        </form>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+     <h2>No users found!</h2>
+    {% endif %}

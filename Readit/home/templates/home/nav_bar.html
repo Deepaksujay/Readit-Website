@@ -11,11 +11,15 @@
         <div class="container">
             <div class="search_wrap search_wrap">
                 <div class="search box">
-                    <input type="text"class= "input" placeholder="search...">
+                    <form action={% url 'search-results' %} method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type='hidden' value={{id}} name='id'>
+                    <input type='hidden' name='select' value='select#@search@input'>
+                    <input type="text"class= "input" placeholder="search users" name='search'>
                     <div class="btn btn_common">
                         <i class="fas fa-search"></i>
                     </div>
-
+                    </form>
                 </div>
             </div>
         </div>

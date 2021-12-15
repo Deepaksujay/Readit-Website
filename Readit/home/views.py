@@ -3,7 +3,7 @@ from django.http.response import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from . models import User ,Question, Answer
+from . models import User ,Question, Answer,Category
 
 user = None
 # Create your views here.
@@ -17,7 +17,8 @@ def start_up(request):
             if select == 'select_0#22':
                 return render(request,'home/home.html',{
                     'id' : id_no,
-                    'user' : user
+                    'user' : user,
+                    'categories' : Category.objects.all()
                 })
             if select == 'select_0#21':
                 photo_added = request.FILES['file_']
@@ -26,7 +27,8 @@ def start_up(request):
                 user.save()
                 return render(request,'home/home.html',{
                     'id' : id_no,
-                    'user' : user
+                    'user' : user,
+                    'categories' : Category.objects.all()
                 })
         except:
             return HttpResponse("Something is wrong")
@@ -50,7 +52,8 @@ def load_up_sign_in(request):
                 if user.profile_image:
                     return render(request,'home/home.html',{
                         'id' : user.id,
-                        'user' : user
+                        'user' : user,
+                        'categories' : Category.objects.all()
                     })
                 else: 
                     return render(request,"home/index_profile.html",{
@@ -103,6 +106,23 @@ def load_up_sign_up(request):
                     'not_registered' : False
                     })
 
+def search_results(request):
+    if request.method == 'POST':
+        received_info = request.POST
+        id_no = received_info['id']
+        if received_info['select'] == 'select#@search@input':
+            results = User.objects.filter(name__contains = received_info['search']).exclude(id=id_no)
+            return render(request,'home/search_results.html',{
+                'id' : id_no,
+                'users' : results
+            })
+        elif received_info['select'] == 'select#@search@result':
+            user = User.objects.get(id = received_info['user_id'])
+            return render(request,'home/user_profile.html',{
+                'id' : id_no,
+                'user' : user
+            })
+
 def contact_us(request):
     if request.method == 'POST':
         id_no = request.POST['id']
@@ -143,7 +163,8 @@ def home(request):
         if input_object['select'] == 'select#@home@page' :
             return render(request,'home/home.html',{
                 'id' : id_no,
-                'user' : user
+                'user' : user,
+                'categories' : Category.objects.all()
             })
     
 
