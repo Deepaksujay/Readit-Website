@@ -22,15 +22,17 @@ class Category(models.Model):
     def __str__(self):
         return self.category
 class Question(models.Model):
-    question = models.TextField(blank=False)
+    question = models.TextField(blank=True)
     time = models.TimeField()
     date = models.DateField()
-    likes = models.ManyToManyField(User,default = None,related_name='q_likes')
-    category = models.ForeignKey(Category,default = None,on_delete=RESTRICT,blank=True,related_name='questions')
+    likes = models.ManyToManyField(User,blank=True,related_name='q_likes')
+    category = models.ForeignKey(Category,default = None,on_delete=RESTRICT,blank=False,related_name='questions')
     author = models.ForeignKey(User,on_delete=CASCADE,null=False,blank=False,related_name = 'questions')
     class Meta:
         verbose_name = 'Question'
         verbose_name_plural = 'Questions' 
+    def __str__(self):
+        return self.author.name+'-'+str(self.time)+'-('+str(self.date)+')'
 
 class Answer(models.Model):
     answer = models.TextField(blank=False)

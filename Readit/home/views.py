@@ -4,8 +4,9 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from . models import User ,Question, Answer,Category
+import datetime
+import pytz
 
-user = None
 # Create your views here.
 def start_up(request):
     if request.method == 'POST':
@@ -14,11 +15,15 @@ def start_up(request):
             id_no = recieved_data['id']
             select = recieved_data['select']
             user = User.objects.get(id = id_no)
+            questions = Question.objects.order_by('-time').exclude(author = user)
             if select == 'select_0#22':
                 return render(request,'home/home.html',{
                     'id' : id_no,
                     'user' : user,
-                    'categories' : Category.objects.all()
+                    'categories' : Category.objects.all(),
+                    'questions' : questions,
+                    'user_count' : User.objects.all().count(),
+                    'total_questions' : Question.objects.all().count(),
                 })
             if select == 'select_0#21':
                 photo_added = request.FILES['file_']
@@ -28,7 +33,10 @@ def start_up(request):
                 return render(request,'home/home.html',{
                     'id' : id_no,
                     'user' : user,
-                    'categories' : Category.objects.all()
+                    'categories' : Category.objects.all(),
+                    'questions' : questions,
+                    'user_count' : User.objects.all().count(),
+                    'total_questions' : Question.objects.all().count(),
                 })
         except:
             return HttpResponse("Something is wrong")
@@ -50,10 +58,14 @@ def load_up_sign_in(request):
             user = User.objects.get(email = user_email)
             if user.password == user_password:
                 if user.profile_image:
+                    questions = Question.objects.order_by('-time').exclude(author=user)
                     return render(request,'home/home.html',{
                         'id' : user.id,
                         'user' : user,
-                        'categories' : Category.objects.all()
+                        'categories' : Category.objects.all(),
+                        'questions' : questions,
+                        'user_count' : User.objects.all().count(),
+                        'total_questions' : Question.objects.all().count(),
                     })
                 else: 
                     return render(request,"home/index_profile.html",{
@@ -110,14 +122,20 @@ def search_results(request):
     if request.method == 'POST':
         received_info = request.POST
         id_no = received_info['id']
+        user_id = received_info['user_id']
         if received_info['select'] == 'select#@search@input':
             results = User.objects.filter(name__contains = received_info['search']).exclude(id=id_no)
             return render(request,'home/search_results.html',{
                 'id' : id_no,
                 'users' : results
             })
-        elif received_info['select'] == 'select#@search@result':
-            user = User.objects.get(id = received_info['user_id'])
+        elif received_info['select'] == 'select#@search@result': 
+            user = User.objects.get(id = user_id)
+            if user_id == id_no:
+                return render(request,'home/my_profile.html',{
+                    'id' : id_no,
+                    'user' : user
+                })
             return render(request,'home/user_profile.html',{
                 'id' : id_no,
                 'user' : user
@@ -160,11 +178,63 @@ def home(request):
                 'id' : id_no,
                 'submitted' : True
             })
-        if input_object['select'] == 'select#@home@page' :
+        elif input_object['select'] == 'select#@home@page' :
+            questions = Question.objects.order_by('-time').exclude(author=user)
             return render(request,'home/home.html',{
                 'id' : id_no,
                 'user' : user,
-                'categories' : Category.objects.all()
+                'categories' : Category.objects.all(),
+                'questions' : questions,
+                'user_count' : User.objects.all().count(),
+                'total_questions' : Question.objects.all().count(),
             })
-    
+
+def post_question(request):
+    if request.method == 'POST':
+        solutions = request.POST
+        id_no = solutions['id']
+        user = User.objects.get(id=id_no)
+        question_text = solutions['comments']
+        selected_category = Category.objects.get(category = solutions['category'])
+        IST = pytz.timezone('Asia/Kolkata')
+        Question.objects.create(question = question_text,
+            time = datetime.datetime.now(IST).time(),
+            date = datetime.datetime.now(IST).date(),
+            category = selected_category,
+            author = user)
+        questions = Question.objects.order_by('-time')#.exclude(author=user)
+        return render(request,'home/home.html',{
+            'id' : id_no,
+            'user' : user,
+            'categories' : Category.objects.all(),
+            'questions' : questions,
+            'user_count' : User.objects.all().count(),
+            'total_questions' : Question.objects.all().count(),
+        })
+
+def category_filter(request):
+    if request.method == 'POST':
+        selected_category = request.POST['category']
+        selected_filter = request.POST['filter']
+        id_no = request.POST['id']
+        user = User.objects.get(id=id_no)
+        questions = Question.objects.order_by('-time')
+        if selected_category != 'Categories':
+            category_got = Category.objects.get(category=selected_category)
+            questions = questions.filter(category=category_got)
+        if selected_filter != 'Filter by':
+            if selected_filter == 'Oldest':
+                questions = questions.order_by('time')
+            # elif selected_filter == 'Replys':
+            #     questions = questions.order_by('questions.answers.count()')
+        return render(request,'home/home.html',{
+            'id' : id_no,
+            'user' : user,
+            'categories' : Category.objects.all(),
+            'questions' : questions,
+            'user_count' : User.objects.all().count(),
+            'total_questions' : Question.objects.all().count(),
+        })
+
+
 

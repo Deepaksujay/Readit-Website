@@ -9,5 +9,7 @@ urlpatterns = [
     path('contact-us',views.contact_us,name='contact-us'),
     path('about-us',views.about_us,name='about-us'),
     path('my-profile',views.my_profile,name='my-profile'),
-    path('search-results',views.search_results,name='search-results')
+    path('search-results',views.search_results,name='search-results'),
+    path('post-question',views.post_question,name='post-question'),
+    path('category-filter',views.category_filter,name='category-filter')
 ]
