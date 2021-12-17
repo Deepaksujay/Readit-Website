@@ -38,6 +38,15 @@ def start_up(request):
                     'user_count' : User.objects.all().count(),
                     'total_questions' : Question.objects.all().count(),
                 })
+            if select == 'select_0#23':
+                photo_added = request.FILES['file_']
+                user = User.objects.get(id = int(id_no))
+                user.profile_image = photo_added
+                user.save()
+                return render(request,'home/my_profile_new.html',{
+                    'id' : id_no,
+                    'user' : user,
+                })
         except:
             return HttpResponse("Something is wrong")
 
@@ -94,10 +103,35 @@ def load_up_sign_up(request):
         main_object = request.POST
         try:
             if main_object['pswd'] == main_object['cnfrmpswd']:
+                if main_object['select'] == "select@myprofile@password@edit":
+                    user = User.objects.get(id = main_object['id'])
+                    if user.password == main_object['oldpsw']:
+                        user.password = main_object['pswd']
+                        user.save()
+                        return render(request,'home/my_profile_new.html',{
+                            'id' : main_object['id'],
+                            'user' : user,
+                            'error' : 'Password updated sucessfully'
+                        })
+                    else:
+                        return render(request,'home/my_profile_new.html',{
+                            'id' : main_object['id'],
+                            'user' : user,
+                            'error' : 'Enter Old password correctly'
+                        })
                 email = main_object['email']
                 email = email.lower()
                 user = User.objects.create(name=main_object['txt'],email=email, password=main_object['pswd'])
             else:
+                if main_object['select'] == "select@myprofile@password@edit":
+                    user = User.objects.get(id = main_object['id'])
+                    return render(request,'home/my_profile_new.html',{
+                        'id' : main_object['id'],
+                        'user' : user,
+                        'error' : "Confirm password isn't matching with new password"
+                    })
+                if main_object['select'] == "select@myprofile@password@edit":
+                    pass
                 return render(request,'home/index.html',{
                             'error' : True,
                             'already_registered' : False,
@@ -122,7 +156,6 @@ def search_results(request):
     if request.method == 'POST':
         received_info = request.POST
         id_no = received_info['id']
-        user_id = received_info['user_id']
         if received_info['select'] == 'select#@search@input':
             results = User.objects.filter(name__contains = received_info['search']).exclude(id=id_no)
             return render(request,'home/search_results.html',{
@@ -130,13 +163,14 @@ def search_results(request):
                 'users' : results
             })
         elif received_info['select'] == 'select#@search@result': 
+            user_id = received_info['user_id']
             user = User.objects.get(id = user_id)
             if user_id == id_no:
-                return render(request,'home/my_profile.html',{
+                return render(request,'home/_new',{
                     'id' : id_no,
                     'user' : user
                 })
-            return render(request,'home/user_profile.html',{
+            return render(request,'home/user_profile_new.html',{
                 'id' : id_no,
                 'user' : user
             })
@@ -162,10 +196,18 @@ def my_profile(request):
     if request.method == 'POST':
         id_no = request.POST['id']
         user = User.objects.get(id = int(id_no))
-        return render(request,'home/my_profile.html',{
-            'id' : id_no,
-            'user' : user
-        })
+        if request.POST['select'] == "select@myprofile@001":
+            return render(request,'home/my_profile_new.html',{
+                'id' : id_no,
+                'user' : user
+            })
+        if request.POST['select'] == "select@myprofile@Name@edit":
+            user.name = request.POST['userID']
+            user.save()
+            return render(request,'home/my_profile_new.html',{
+                'id' : id_no,
+                'user' : user
+            })
 
 def home(request):
     if request.method == 'POST':
