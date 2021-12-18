@@ -1,40 +1,5 @@
 {% load static %}
-{% comment %} <!DOCTYPE html>
-
-<html>
-	<!DOCTYPE html>
-	<html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<title>Readit Homepage</title>
-		<link href="https://fonts.googleapis.com/css2?family=Merienda&display=swap" rel="stylesheet">
-		<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-		<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
-		<link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css" rel="stylesheet">
-		<link href="{% static "home/home_style.css" %}" rel="stylesheet">
-	</head>
-	<body>
-		{% include "./nav_bar.html" %}
-			
-			<div class="carousel-inner">
-				<div class="carousel-item active">
-					<img alt="" class="d-block w-100" src="https://i.postimg.cc/0y3V1QVM/img.jpg">
-					<div class="carousel-caption d-none d-md-block">
-						<h5 class="animated" style="text-decoration: cornflowerblue;" >Happy Learning {{user.name}}!</h5>
-						<l class="animated bounceInLeft" style="text-decoration: cornflowerblue;">Export Answers for your Questions,</l>
-						<p class="animated " style="text-decoration: cornflowerblue;">start your Journey with Us .</p>
-						
-					</div>
-				</div>
-			</div>
-		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js">
-		</script> 
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js">
-		</script> 
-		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js">
-		</script>
-	</body>
-	</html> {% endcomment %}
+{% comment %} {% load static %}
 
   <!DOCTYPE html>
   <html lang="en">
@@ -109,7 +74,6 @@
                         <option> Filter by </option>
                         <option> Oldest </option>
                         <option> Newest </option>
-                        {% comment %} <option> Views </option> {% endcomment %}
                       </select>
                   </div>
                 </div>
@@ -146,14 +110,12 @@
               <div class="row align-items-center">
                 <div class="col-md-8 mb-3 mb-sm-0">
                   <h5 class="text-primary">
-                    {% comment %} <a href="#" class="text-primary">Drupal 8 quick starter guide</a> {% endcomment %}
                     {{ question.question }}
                   </h5>
                   <form action={% url 'search-results' %} method="POST" enctype="multipart/form-data">
                   {% csrf_token %}
                   <input type='hidden' value={{id}} name='id'>
                   <input type='hidden' value={{question.author.id}} name='user_id'>
-                  {% comment %} here should be hidden input of id of user {% endcomment %}
                   <input type='hidden' value='select#@search@result' name='select'>
                   <p class="text-sm"><span class="op-6">Posted at</span> <span class="text-black" >{{ question.time }}</span> <span class="op-6">on </span><span class="text-black" >{{ question.date }}</span><span class="op-6">by</span> <button class="text-black" type='submit' >{{ question.author.name }}</button></p>
                   </form>
@@ -251,4 +213,340 @@
     
     </script>
     </body>
-    </html>
+    </html> {% endcomment %}
+
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="utf-8">
+      <title>home feed</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+      <script>
+          function clickCounter() {
+            if (typeof(Storage) !== "undefined") {
+              if (localStorage.clickcount) {
+                localStorage.clickcount = Number(localStorage.clickcount)+1;
+              } else {
+                localStorage.clickcount = 1;
+              }
+              document.getElementById("result").innerHTML = "Total votes " + localStorage.clickcount;
+            } else {
+              document.getElementById("result").innerHTML = "Sorry, your browser does not support web storage...";
+            }
+          }
+          function clickCounterlike() {
+        if (typeof(Storage) !== "undefined") {
+          if (localStorage.clickcountlike) {
+            localStorage.clickcountlike = Number(localStorage.clickcountlike)+1;
+          } else {
+            localStorage.clickcountlike = 1;
+          }
+          document.getElementById("resultlike").innerHTML = "Likes " + localStorage.clickcountlike;
+        } else {
+          document.getElementById("resultlike").innerHTML = "Sorry, your browser does not support web storage...";
+        }
+      }
+      function clickCounterdislike() {
+        if (typeof(Storage) !== "undefined") {
+          if (localStorage.clickcountdislike) {
+            localStorage.clickcountdislike = Number(localStorage.clickcountdislike)+1;
+          } else {
+            localStorage.clickcountdislike = 1;
+          }
+          document.getElementById("resultdislike").innerHTML = "Dislikes " + localStorage.clickcountdislike;
+        } else {
+          document.getElementById("resultdislike").innerHTML = "Sorry, your browser does not support web storage...";
+        }
+      }
+      </script>
+      <style type="text/css">
+          div.hidden{
+          display: none;
+          }
+          div.visible{
+          display: block;
+          }
+          .comment_box{
+          border-style:solid;
+          border-width:1px;
+          float:left;
+          background-color:#d4d4cb;
+          width:280px;
+          padding-left:20px;
+          padding-top:25px;
+          padding-bottom:10px;
+          }
+      </style>
+  </head>
+  <body>
+  {% include 'home/nav_bar.html' %}
+  <br><br>
+    <link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet">
+  <div class="container">
+        <div class="row">
+          <!-- Main content -->
+          <form action={% url 'category-filter' %} method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type='hidden' value={{id}} name='id'>
+            <div class="col-lg-9 mb-3">
+              <div class="row text-left mb-5">
+                <div class="col-lg-6 mb-3 mb-sm-0">
+                  <div class="dropdown bootstrap-select form-control form-control-lg bg-white bg-op-9 text-sm w-lg-50" style="width: 100%;">
+                    <select class="form-control form-control-lg bg-white bg-op-9 text-sm w-lg-50" data-toggle="select" tabindex="-98" name='category' placeholder='Categories'>
+                      <option> Categories </option>
+                      {% for category in categories%}
+                      <option> {{category}} </option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+                <div class="col-lg-6 text-lg-right">
+                  <div class="dropdown bootstrap-select form-control form-control-lg bg-white bg-op-9 ml-auto text-sm w-lg-50" style="width: 100%;">
+                      <select class="form-control form-control-lg bg-white bg-op-9 ml-auto text-sm w-lg-50" data-toggle="select" tabindex="-98" name='filter'>
+                        <option> Filter by </option>
+                        <option> Oldest </option>
+                        <option> Newest </option>
+                        {% comment %} <option> Views </option> {% endcomment %}
+                      </select>
+                  </div>
+                </div>
+              </div>
+              <button type="submit">Apply</button>
+          </form>
+          
+          
+            <!-- End of post 1 -->
+            <script type="text/javascript">
+              function showCommentBox(){
+              var div=document.getElementById('comment');
+              div.className='visible';
+              }
+            </script>
+              <form action={% url 'post-question' %} method="post">
+                {% csrf_token %}
+              <input type="button" value="Ask question" onclick="showCommentBox()"><br>
+              <input type='hidden' value={{id}} name='id'>
+              <div class="hidden" id="comment">
+              <p>Write your question<br><textarea name="comments" rows="3" cols="30" required></textarea><br><br>
+              <select class="form-control form-control-lg bg-white bg-op-9 text-sm w-lg-50" data-toggle="select" tabindex="-98" placeholder='Categories' name='category'>
+              {% for category in categories%}
+                <option> {{category}} </option>
+              {% endfor %}
+              </select>
+              <button type="submit" name="sub" >Post</button>
+  
+              </p>
+              </div>
+              </form>
+            {% for question in questions %}
+            <div class="card row-hover pos-relative py-3 px-3 mb-3 border-warning border-top-0 border-right-0 border-bottom-0 rounded-0">
+              <div class="row align-items-center">
+                <div class="col-md-8 mb-3 mb-sm-0">
+                  <h5 class="text-primary">
+                    {% comment %} <a href="#" class="text-primary">Drupal 8 quick starter guide</a> {% endcomment %}
+                    {{ question.question }}
+                  </h5>
+                  <form action={% url 'search-results' %} method="POST" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <input type='hidden' value={{id}} name='id'>
+                  <input type='hidden' value={{question.author.id}} name='user_id'>
+                  {% comment %} here should be hidden input of id of user {% endcomment %}
+                  <input type='hidden' value='select#@search@result' name='select'>
+                  <p class="text-sm"><span class="op-6">Posted at</span> <span class="text-black" >{{ question.time }}</span> <span class="op-6">on </span><span class="text-black" >{{ question.date }}</span><span class="op-6">by</span> <button class="text-black" type='submit' >{{ question.author.name }}</button></p>
+                  </form>
+                  <div class="text-sm op-5"> category : {{question.category}}</div>
+                </div>
+                <div class="form-control bg-white bg-op-9 text-sm w-lg-50" >
+                  <form class="answer" action={% url 'comment-added' %} method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type='hidden' value={{id}} name='id'>
+                    <input type='hidden' value={{question.id}} name='question_id'>
+                    <input type="text" placeholder="Reply answer" name="answer">
+                    <button type="submit">Submit</button>
+                  </form>
+                </div> 
+                
+                <div class="col-md-4 op-7">
+                  <!--<div class="row text-center op-7">-->
+                    <div class="col px-1"> 
+                        <i class="ion-connection-bars icon-1x"></i>
+                         <p><button onclick="clickCounter()" type="button">Vote</button></p>
+                         <div id="result"></div>
+                      </div>
+                    <div class="col px-1"> <i class="ion-ios-chatboxes-outline icon-1x"></i> <button class="d-block text-sm" onclick="openForm_{{question.id}}()">Replies</button>
+                      <!--replies-->  
+                    <div class="form-popup" id="myForm-{{question.id}}">
+                      <div class="profile-content">
+                        <div class="tab-content p-0">
+                           <div class="tab-pane fade active show" id="profile-post">
+                              <div class="timeline">
+                                    <div class="timeline-body">
+                                      {% if not question.answers.all %}                               
+                                      <span >Sorry There are no answers for this question. Be the first one to answer</span>
+                                      {% endif %}
+                                      {% for answer in question.answers.all %}
+                                       <div class="timeline-header">
+                                            {% if answer.author.profile_image.url %}
+                                              <span class="userimage"><img src="{{ answer.author.profile_image.url }}" alt=""></span>
+                                            {% else %}
+                                              <span class="userimage"><img src="{% static 'home/profile_default.jpg' %}" alt=""></span>
+                                            {% endif %}
+                                            <form action={% url 'search-results' %} method="POST" enctype="multipart/form-data">
+                                              {% csrf_token %}
+                                              <input type='hidden' value={{id}} name='id'>
+                                              <input type='hidden' value={{answer.author.id}} name='user_id'>
+                                              <input type='hidden' value='select#@search@result' name='select'>
+                                              <button type='submit' class="username">{{ answer.author.name }}</button>
+                                            </form>
+                                            {% comment %} <span class="pull-right text-muted">1,282 Views</span> {% endcomment %}
+                                            <span class="date">{{ answer.date }}</span>
+                                            <span class="time">{{ answer.time }}</span>
+                                       </div>
+                                       <div class="timeline-content">
+                                          <p class="lead">
+                                            {% if answer %}
+                                             <i class="fa fa-quote-left fa-fw pull-left"></i>
+                                             {{ answer.answer }}
+                                             <i class="fa fa-quote-right fa-fw pull-right"></i>
+                                             {% endif %}
+                                          </p>
+                                       </div>
+                                    
+                                       <div class="timeline-footer">
+                                          
+                                          <button onclick="clickCounterlike()" class=" m-r-20 text-inverse-lighter fa fa-thumbs-up fa-fw fa-lg m-r-3" type="button">Like</button>
+                                          <button onclick="clickCounterdislike()" class=" m-r-15 text-inverse-lighter fa fa-thumbs-down fa-fw fa-lg m-r-3" type="button">Dislike</button><br>
+                                          <div id="resultlike" class=" m-r-20 text-inverse-lighter"></div>
+                                          <div id="resultdislike" class=" m-r-20 text-inverse-lighter"></div>
+                                            
+                                          
+                                       </div>
+                                       {% endfor %}
+                                    </div>
+                                  </div>
+                              </div>
+                           </div>
+                     </div>
+                     <button class="edit_button" onclick="closeForm_{{question.id}}()">Close</button> 
+                     </div>
+                     
+                    </div>
+  <!--replies--> 
+                 
+                    </div>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+            {% endfor %}
+            <!-- Sidebar content -->
+          <div class="col-lg-3 mb-4 mb-lg-0 px-lg-0 mt-lg-0">
+              <div style="visibility: hidden; display: none; width: 285px; height: 801px; margin: 0px; float: none; position: static; inset: 85px auto auto;"></div><div data-settings="{&quot;parent&quot;:&quot;#content&quot;,&quot;mind&quot;:&quot;#header&quot;,&quot;top&quot;:10,&quot;breakpoint&quot;:992}" data-toggle="sticky" class="sticky" style="top: 85px;"><div class="sticky-inner">
+                <div class="bg-white mb-3">
+                  <h4 class="px-3 py-4 op-5 m-0">
+                    Active Categories
+                  </h4>
+                  <hr class="m-0">
+                  <div class="pos-relative px-3 py-3">
+                    <h6 class="text-primary text-sm">
+                      <a href="#" class="text-primary">Why Bootstrap 4 is so awesome? </a>
+                    </h6>
+                    <p class="mb-0 text-sm"><span class="op-6">Posted</span> <a class="text-black" href="#">39 minutes</a> <span class="op-6">ago by</span> <a class="text-black" href="#">AppStrapMaster</a></p>
+                  </div>
+                  <hr class="m-0">
+                  <div class="pos-relative px-3 py-3">
+                    <h6 class="text-primary text-sm">
+                      <a href="#" class="text-primary">Custom shortcut or command to launch command in terminal? </a>
+                    </h6>
+                    <p class="mb-0 text-sm"><span class="op-6">Posted</span> <a class="text-black" href="#">58 minutes</a> <span class="op-6">ago by</span> <a class="text-black" href="#">DanielD</a></p>
+                  </div>
+                  <hr class="m-0">
+                  <div class="pos-relative px-3 py-3">
+                    <h6 class="text-primary text-sm">
+                      <a href="#" class="text-primary">HELP! My Windows XP machine is down </a>
+                    </h6>
+                    <p class="mb-0 text-sm"><span class="op-6">Posted</span> <a class="text-black" href="#">48 minutes</a> <span class="op-6">ago by</span> <a class="text-black" href="#">DanielD</a></p>
+                  </div>
+                  <hr class="m-0">
+                  <div class="pos-relative px-3 py-3">
+                    <h6 class="text-primary text-sm">
+                      <a href="#" class="text-primary">HELP! My Windows XP machine is down </a>
+                    </h6>
+                    <p class="mb-0 text-sm"><span class="op-6">Posted</span> <a class="text-black" href="#">38 minutes</a> <span class="op-6">ago by</span> <a class="text-black" href="#">DanielD</a></p>
+                  </div>
+                  <hr class="m-0">
+                </div>
+                <div class="bg-white text-sm">
+                  <h4 class="px-3 py-4 op-5 m-0 roboto-bold">
+                    Stats
+                  </h4>
+                  <hr class="my-0">
+                  <div class="row text-center d-flex flex-row op-7 mx-0">
+                    <div class="col-sm-6 flex-ew text-center py-3 border-bottom border-right"> <a class="d-block lead font-weight-bold" href="#">{{ user_count }}</a> Members </div>
+                    <div class="col-sm-6 col flex-ew text-center py-3 border-bottom mx-0"> <a class="d-block lead font-weight-bold" href="#">{{ total_questions }}</a> Posts </div>
+                  </div>
+                </div>
+              </div></div>
+            </div>
+          </div>
+        </div>
+    
+    <style type="text/css">
+    body{
+        margin-top:20px;
+        background:#eee;
+        color: #708090;
+    }
+    .icon-1x {
+        font-size: 24px !important;
+    }
+    a{
+        text-decoration:none;    
+    }
+    .text-primary, a.text-primary:focus, a.text-primary:hover {
+        color: #00ADBB!important;
+    }
+    .text-black, .text-hover-black:hover {
+        color: #000 !important;
+    }
+    .font-weight-bold {
+        font-weight: 700 !important;
+    }
+    form.answer input[type=text] {
+    font-size: 17px;
+    border: 1px solid #212529;
+    float: left;
+    width: 80%;
+    background: white;
+}
+.form-popup {
+  
+    display: none;
+    position: initial;
+    bottom: 0;
+    right: 10px;
+    border: 3px solid #f1f1f1;
+    z-index: 6;
+    }
+
+  </style>
+  
+  <script>
+    {% for question in questions %}
+  function openForm_{{question.id}}(){
+        document.getElementById("myForm-{{question.id}}").style.display = "block";
+  }
+
+  function closeForm_{{question.id}}() {
+        document.getElementById("myForm-{{question.id}}").style.display = "none";
+  }
+  {% endfor %}
+  </script>
+  </body>
+  </html>

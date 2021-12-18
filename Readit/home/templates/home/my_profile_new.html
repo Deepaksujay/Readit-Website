@@ -213,19 +213,19 @@ body {font-family: Arial;}
                     <div class="cardtext-center sidebar">
                         <div class="card-body">
                             <div class="profile-pic-div">
-                            {% if user.profile_image %}
-                                <img src="{{ user.profile_image.url }}" id="photo" class="rounded-circle" width="150">
-                            {% else %} 
                             <form action={% url 'start-up' %} method="POST" enctype="multipart/form-data">
                                 {% csrf_token %}
+                                {% if user.profile_image %}
+                                <img src="{{ user.profile_image.url }}" id="photo" class="rounded-circle" width="150">
+                                {% else %} 
                                 <img src="{% static 'home/profile_default.jpg' %}" id="photo" class="rounded-circle" width="150">
+                                {% endif %}
                                 <input type="file" name='file_' id="file" required=''>
                                 <input type="hidden" name="select" id="skip" value='select_0#23'>
                                 <input type='hidden' name='id' value={{id}}>
                                 <label for="file" id="photoBtn">Choose photo</label>
                                 <button type ='submit' for='file' >Upload</button>
                             </form>
-                                {% endif %}
                           </div>
                         </div> 
                         </div>

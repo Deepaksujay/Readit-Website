@@ -11,5 +11,6 @@ urlpatterns = [
     path('my-profile',views.my_profile,name='my-profile'),
     path('search-results',views.search_results,name='search-results'),
     path('post-question',views.post_question,name='post-question'),
-    path('category-filter',views.category_filter,name='category-filter')
+    path('category-filter',views.category_filter,name='category-filter'),
+    path('comment-added',views.comment_added,name="comment-added"),
 ]

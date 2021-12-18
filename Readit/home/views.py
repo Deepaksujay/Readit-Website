@@ -166,7 +166,7 @@ def search_results(request):
             user_id = received_info['user_id']
             user = User.objects.get(id = user_id)
             if user_id == id_no:
-                return render(request,'home/_new',{
+                return render(request,'home/my_profile_new.html',{
                     'id' : id_no,
                     'user' : user
                 })
@@ -278,5 +278,27 @@ def category_filter(request):
             'total_questions' : Question.objects.all().count(),
         })
 
-
+def comment_added(request):
+    if request.method == 'POST':
+        id_no = request.POST['id']
+        question_id = request.POST['question_id']
+        question = Question.objects.get(id = question_id)
+        user = User.objects.get(id = id_no)
+        answer = request.POST['answer']
+        IST = pytz.timezone('Asia/Kolkata')
+        Answer.objects.create(answer=answer,
+            question = question,
+            author = user,
+            time = datetime.datetime.now(IST).time(),
+            date = datetime.datetime.now(IST).date(),)
+        questions = Question.objects.order_by('-time')#.exclude(author=user)
+        return render(request,'home/home.html',{
+            'id' : id_no,
+            'user' : user,
+            'categories' : Category.objects.all(),
+            'questions' : questions,
+            'user_count' : User.objects.all().count(),
+            'total_questions' : Question.objects.all().count(),
+        })
+        
 

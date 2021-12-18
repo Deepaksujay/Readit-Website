@@ -38,8 +38,8 @@ class Answer(models.Model):
     answer = models.TextField(blank=False)
     time = models.TimeField()
     date = models.DateField()
-    likes = models.ManyToManyField(User,default = None,related_name='a_likes')
-    dislikes = models.ManyToManyField(User,default = None,related_name='a_dislikes')
+    likes = models.ManyToManyField(User,blank = True,related_name='a_likes')
+    dislikes = models.ManyToManyField(User,blank = True,related_name='a_dislikes')
     question = models.ForeignKey(Question,on_delete=CASCADE,null=True,related_name = 'answers')
     author = models.ForeignKey(User,on_delete=CASCADE,null=False,related_name='answers')
 
