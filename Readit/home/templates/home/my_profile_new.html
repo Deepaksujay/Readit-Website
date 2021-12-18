@@ -8,6 +8,7 @@
     <title>PracProfile</title>
     <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="myprofile.css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400&display=swap");
 body {
@@ -201,6 +202,169 @@ body {font-family: Arial;}
     </style>
 </head>
 <body>
+  <style>
+
+    body{
+        margin-top:20px;
+        background:rgb(17, 17, 17);
+    }
+    .fa-fw {
+        width: auto;
+        text-align: center;
+    }
+    
+    form.comment input[type=text] {
+        font-size: 17px;
+        border: 1px solid #212529;
+        float: left;
+        width: 80%;
+        background: white;
+    }
+    
+    .profile-content {
+        padding: 25px;
+        border-radius: 4px
+    }
+    
+    .profile-content:after,
+    .profile-content:before {
+        content: '';
+        display: table;
+        clear: both
+    }
+    
+    .profile-content .tab-content,
+    .profile-content .tab-pane {
+        background: 0 0
+    }
+    
+    .bg-white {
+        background-color: #fff!important;
+    }
+    .p-10 {
+        padding: 10px!important;
+    }
+    .media.media-xs .media-object {
+        width: 32px;
+    }
+    .m-b-2 {
+        margin-bottom: 2px!important;
+    }
+    .timeline .timeline-body {
+        margin-left: 23%;
+        margin-right: 17%;
+        background: #fff;
+        position: relative;
+        padding: 20px 25px;
+        border-radius: 6px
+    }
+    .timeline .timeline-body>div+div {
+        margin-top: 15px
+    }
+    .timeline-header {
+        padding-bottom: 10px;
+        border-bottom: 1px solid #e2e7eb;
+        line-height: 30px
+    }
+    .timeline-header .userimage {
+        float: left;
+        width: 34px;
+        height: 34px;
+        border-radius: 40px;
+        overflow: hidden;
+        margin: -2px 10px -2px 0
+    }
+    
+    .timeline-header .username {
+        font-size: 16px;
+        font-weight: 600
+    }
+    
+    .timeline-header .username,
+    .timeline-header .username a {
+        color: #2d353c
+    }
+    
+    .timeline img {
+        max-width: 100%;
+        display: block
+    }
+    
+    .timeline-content {
+        letter-spacing: .25px;
+        line-height: 18px;
+        font-size: 13px
+    }
+    
+    .timeline-content:after,
+    .timeline-content:before {
+        content: '';
+        display: table;
+        clear: both
+    }
+    
+    .timeline-title {
+        margin-top: 0
+    }
+    
+    .timeline-footer {
+        background: #fff;
+        border-top: 1px solid #e2e7ec;
+        padding-top: 15px
+    }
+    
+    .timeline-footer a:not(.btn) {
+        color: #575d63
+    }
+    
+    .timeline-footer a:not(.btn):focus,
+    .timeline-footer a:not(.btn):hover {
+        color: #2d353c
+    }
+    
+    .timeline-likes {
+        color: #6d767f;
+        font-weight: 600;
+        font-size: 12px
+    }
+    
+    .timeline-likes .stats-right {
+        float: right
+    }
+    
+    .timeline-likes .stats-total {
+        display: inline-block;
+        line-height: 20px
+    }
+    
+    .timeline-likes .stats-icon {
+        float: left;
+        margin-right: 5px;
+        font-size: 9px
+    }
+    
+    .timeline-likes .stats-icon+.stats-icon {
+        margin-left: -2px
+    }
+    
+    .timeline-likes .stats-text {
+        line-height: 20px
+    }
+    
+    .timeline-likes .stats-text+.stats-text {
+        margin-left: 15px
+    }
+    .lead {
+        margin-bottom: 20px;
+        font-size: 21px;
+        font-weight: 300;
+        line-height: 1.4;
+    }
+    .text-danger, .text-red {
+        color: #ff5b57!important;
+    }
+    
+      </style>
     {% include 'home/nav_bar.html' %}
     <div class="container">
         <div class="main">
@@ -306,29 +470,157 @@ body {font-family: Arial;}
                     {% if not user.questions.all %}
                         <br>You haven't posted any Question yet:(
                     {% endif %}
-                    <ul>
-                    {% for Question in user.questions.all %}
-                         <li>
-                             {{Question.question}}
-                         </li>
-                    {% endfor %}
-                    </ul>
-                </h3>
+                    </h3>
+                    {% comment %} {% for Question in user.questions.all %} {% endcomment %}
+                    <div class="container-box">
+                      <div class="profile-content">
+                        <div class="tab-content p-0">
+                           <div class="tab-pane fade active show" id="profile-post"><ul>
+                            {% for question in user.questions.all %}  <li>
+                            <div class="timeline">
+                                    <div class="timeline-body">
+                                       <div class="timeline-header">
+                                          <span class="userimage"><img src="{{question.author.profile_image.url}}" alt=""></span>
+                                          <span class="username">{{question.author.name}}</span>
+                                          <span class="pull-right text-muted">{{question.category}}</span>
+                                          <span class="date">{{question.date}}</span>
+                                          <span class="time">{{question.time}}</span>
+                                       </div>
+                                       <div class="timeline-content">
+                                         <p> <b style="font-size:large;" >{{question.question}}</b></p><hr>
+                                          <p class="lead">
+                                            {% if not question.answers.all %}
+                                            <i class="fa fa-quote-left fa-fw pull-left"></i>
+                                             There are no answers yet:)
+                                            <i class="fa fa-quote-right fa-fw pull-right"></i>
+                                            {% endif %}
+                                            {% for answer in question.answers.all %}
+                                            <i class="fa fa-quote-left fa-fw pull-left"></i>
+                                              <form action={% url 'search-results' %} method="POST" enctype="multipart/form-data">
+                                              {% csrf_token %}
+                                              <input type='hidden' value={{id}} name='id'>
+                                              <input type='hidden' value={{answer.author.id}} name='user_id'>
+                                              <input type='hidden' name='select' value='select#@search@result'>
+                                              <h3>{{answer.answer}}</h3><br>by <button type='submit'>{{answer.author.name}}</button> posted on {{answer.date}} at {{answer.time}}
+                                              </form>
+                                              <i class="fa fa-quote-right fa-fw pull-right"></i>
+                                             {% endfor %}
+                                          </p>
+                                       </div>
+                                       <div class="timeline-footer">
+                                          
+                                          <button onclick="clickCounterlike()" class=" m-r-20 text-inverse-lighter fa fa-thumbs-up fa-fw fa-lg m-r-3" type="button">Like</button>
+                                          <button onclick="clickCounterdislike()" class=" m-r-15 text-inverse-lighter fa fa-thumbs-down fa-fw fa-lg m-r-3" type="button">Dislike</button><br>
+                                          <div id="resultlike" class=" m-r-20 text-inverse-lighter"></div>
+                                          <div id="resultdislike" class=" m-r-20 text-inverse-lighter"></div><hr>
+                                           
+                                          
+                                       </div>
+                                    </div>
+                                  </div></li>
+                                  {% endfor %}<ul>
+                              </div>
+                           </div>
+                     </div>
+                     </div>
+                    </div>
+                     <script>
+                      function clickCounterlike() {
+                        if (typeof(Storage) !== "undefined") {
+                          if (localStorage.clickcountlike) {
+                            localStorage.clickcountlike = Number(localStorage.clickcountlike)+1;
+                          } else {
+                            localStorage.clickcountlike = 1;
+                          }
+                          document.getElementById("resultlike").innerHTML = "Likes " + localStorage.clickcountlike;
+                        } else {
+                          document.getElementById("resultlike").innerHTML = "Sorry, your browser does not support web storage...";
+                        }
+                      }
+                      function clickCounterdislike() {
+                        if (typeof(Storage) !== "undefined") {
+                          if (localStorage.clickcountdislike) {
+                            localStorage.clickcountdislike = Number(localStorage.clickcountdislike)+1;
+                          } else {
+                            localStorage.clickcountdislike = 1;
+                          }
+                          document.getElementById("resultdislike").innerHTML = "Dislikes " + localStorage.clickcountdislike;
+                        } else {
+                          document.getElementById("resultdislike").innerHTML = "Sorry, your browser does not support web storage...";
+                        }
+                      }
+                      
+                    </script>
+                    
+
+                    {% comment %} {% endfor %} {% endcomment %}
                   </div>
                   
                   <div id="Answers" class="tabcontent">
                     <h3>
                     {% if not user.answers.all %}
                         <br>You haven't answered any Question yet:(
-                    {% endif %}
+                    {% endif %}</h3>
                     <ul>
-                    {% for Answer in user.answers.all %}
-                         <li>
-                             {{Answer.answer}}
-                         </li>
-                    {% endfor %}
+                      <div class="container-box">
+                        <div class="profile-content">
+                          <div class="tab-content p-0">
+                             <div class="tab-pane fade active show" id="profile-post"><ul>
+                              {% for answer in user.answers.all %}  <li>
+                              <div class="timeline">
+                                      <div class="timeline-body">
+                                         <div class="timeline-header">
+                                            <span class="userimage"><img src="{{answer.question.author.profile_image.url}}" alt=""></span>
+                                              <form action={% url 'search-results' %} method="POST" enctype="multipart/form-data">
+                                              {% csrf_token %}
+                                              <input type='hidden' value={{id}} name='id'>
+                                              <input type='hidden' value={{answer.question.author.id}} name='user_id'>
+                                              <input type='hidden' name='select' value='select#@search@result'>
+                                            <span class="username"><button type="submit">{{answer.question.author.name}}</button></span>
+                                              </form>
+                                            <span class="pull-right text-muted">{{answer.question.category}}</span>
+                                            <span class="date">{{answer.question.date}}</span>
+                                            <span class="time">{{answer.question.time}}</span>
+                                         </div>
+                                         <div class="timeline-content">
+                                           <p> <b style="font-size:large;" >{{answer.question.question}}</b></p><hr>
+                                            <p class="lead">
+                                              {% if not answer.question.answers.all %}
+                                              <i class="fa fa-quote-left fa-fw pull-left"></i>
+                                               There are no answers yet:)
+                                              <i class="fa fa-quote-right fa-fw pull-right"></i>
+                                              {% endif %}
+                                              {% for Answer in answer.question.answers.all %}
+                                              <i class="fa fa-quote-left fa-fw pull-left"></i>
+                                                <form action={% url 'search-results' %} method="POST" enctype="multipart/form-data">
+                                                {% csrf_token %}
+                                                <input type='hidden' value={{id}} name='id'>
+                                                <input type='hidden' value={{Answer.author.id}} name='user_id'>
+                                                <input type='hidden' name='select' value='select#@search@result'>
+                                                <h3>{{Answer.answer}}</h3><br>by <button type='submit'>{{Answer.author.name}}</button> posted on {{answer.date}} at {{answer.time}}
+                                                </form>
+                                                <i class="fa fa-quote-right fa-fw pull-right"></i>
+                                               {% endfor %}
+                                            </p>
+                                         </div>
+                                         <div class="timeline-footer">
+                                            
+                                            <button onclick="clickCounterlike()" class=" m-r-20 text-inverse-lighter fa fa-thumbs-up fa-fw fa-lg m-r-3" type="button">Like</button>
+                                            <button onclick="clickCounterdislike()" class=" m-r-15 text-inverse-lighter fa fa-thumbs-down fa-fw fa-lg m-r-3" type="button">Dislike</button><br>
+                                            <div id="resultlike" class=" m-r-20 text-inverse-lighter"></div>
+                                            <div id="resultdislike" class=" m-r-20 text-inverse-lighter"></div><hr>
+                                             
+                                            
+                                         </div>
+                                      </div>
+                                    </div></li>
+                                    {% endfor %}<ul>
+                                </div>
+                             </div>
+                       </div>
+                       </div>
+                      </div>
                     </ul> 
-                    </h3>
                   </div>
                   
                   <script>

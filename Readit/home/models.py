@@ -42,5 +42,7 @@ class Answer(models.Model):
     dislikes = models.ManyToManyField(User,blank = True,related_name='a_dislikes')
     question = models.ForeignKey(Question,on_delete=CASCADE,null=True,related_name = 'answers')
     author = models.ForeignKey(User,on_delete=CASCADE,null=False,related_name='answers')
+    def __str__(self):
+        return self.author.name+'-'+str(self.time)+'-('+str(self.date)+')'
 
 
