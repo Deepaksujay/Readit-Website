@@ -363,6 +363,10 @@ body {font-family: Arial;}
     .text-danger, .text-red {
         color: #ff5b57!important;
     }
+    .error{
+      color = white;
+      
+    }
     
       </style>
     {% include 'home/nav_bar.html' %}
@@ -370,7 +374,9 @@ body {font-family: Arial;}
         <div class="main">
             <br><br>
             {% if error %}
-        </h1>{{ error }}</h3>
+            <div class='error' >
+        </h1 class='error'>{{ error }}</h3>
+            </div>
             {% endif %}
             <div class="row">
                 <div class="col-md-4 mt-1">

@@ -391,11 +391,11 @@
                                       {% endif %}
                                       {% for answer in question.answers.all %}
                                        <div class="timeline-header">
-                                            {% if answer.author.profile_image.url %}
+                                            {% comment %} {% if answer.author.profile_image.url %}
                                               <span class="userimage"><img src="{{ answer.author.profile_image.url }}" alt=""></span>
                                             {% else %}
                                               <span class="userimage"><img src="{% static 'home/profile_default.jpg' %}" alt=""></span>
-                                            {% endif %}
+                                            {% endif %} {% endcomment %}
                                             <form action={% url 'search-results' %} method="POST" enctype="multipart/form-data">
                                               {% csrf_token %}
                                               <input type='hidden' value={{id}} name='id'>

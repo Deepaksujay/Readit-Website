@@ -10,7 +10,7 @@
 </head>  
 <body>
 	{% if error%}
-	<div class='error-box-already-registered'>
+	<div class='error-box'>
 		{% if already_registered %}
 		<p> This mail is already registered! </p>
 		{% endif %}
@@ -23,12 +23,15 @@
 		{% if not_registered %}
 		<p> Looks like this mail isn't registered! Try signing up </p>
 		{% endif %}
+		{% if password_not_valid %}
+		<p> New password must be of 8 characters, min of one uppercase and lowercase letter, min one number, min one symbol(@,_,$) </p>
+		{% endif %}
 	</div>
 	{% endif %}
 	<div class="container" id="main">
 		<div class="sign-up">
 			<form action={% url 'load-up-sign-up' %} method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
+            	{% csrf_token %}
 				<h1>Create Account</h1>
 				<input type='hidden' value="select@myprofile@password" name='select'>
 				<input type="text" name="txt" placeholder="Name" required="">

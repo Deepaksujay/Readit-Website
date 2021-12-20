@@ -7,6 +7,35 @@ from . models import User ,Question, Answer,Category
 import datetime
 import pytz
 
+import re 
+
+
+def password_is_wrong(password):
+    flag = 0
+    while True:   
+        if (len(password)<8): 
+            flag = 1
+            break
+        elif not re.search("[a-z]", password): 
+            flag = 1
+            break
+        elif not re.search("[A-Z]", password): 
+            flag = 1
+            break
+        elif not re.search("[0-9]", password): 
+            flag = 1
+            break
+        elif not re.search("[_@$]", password): 
+            flag = 1
+            break
+        elif re.search("\s", password): 
+            flag = 1
+            break
+        else: 
+            flag = 0
+            break
+    return flag   
+
 # Create your views here.
 def start_up(request):
     if request.method == 'POST':
@@ -55,7 +84,8 @@ def start_up(request):
                 'already_registered' : False,
                 'wrong_credentials' : False,
                 'password_match' : False,
-                'not_registered' : False
+                'not_registered' : False,
+                'password_not_valid' : False
             })
 
 def load_up_sign_in(request):
@@ -87,7 +117,8 @@ def load_up_sign_in(request):
                             'already_registered' : False,
                             'wrong_credentials' : True,
                             'password_match' : False,
-                            'not_registered' : False
+                            'not_registered' : False,
+                            'password_not_valid' : False
                        })
         except:
             return render(request,'home/index.html',{
@@ -95,7 +126,8 @@ def load_up_sign_in(request):
                         'already_registered' : False,
                         'wrong_credentials' : False,
                         'password_match' : False,
-                        'not_registered' : True
+                        'not_registered' : True,
+                        'password_not_valid' : False
                     })
 
 def load_up_sign_up(request):
@@ -105,6 +137,12 @@ def load_up_sign_up(request):
             if main_object['pswd'] == main_object['cnfrmpswd']:
                 if main_object['select'] == "select@myprofile@password@edit":
                     user = User.objects.get(id = main_object['id'])
+                    if password_is_wrong(main_object['pswd']):
+                        return render(request,'home/my_profile_new.html',{
+                            'id' : main_object['id'],
+                            'user' : user,
+                            'error' : 'New password must be of 8 characters, min of one uppercase and lowercase letter, min one number, min one symbol(@,_,$)'
+                        })
                     if user.password == main_object['oldpsw']:
                         user.password = main_object['pswd']
                         user.save()
@@ -119,6 +157,15 @@ def load_up_sign_up(request):
                             'user' : user,
                             'error' : 'Enter Old password correctly'
                         })
+                if password_is_wrong(main_object['pswd']):
+                    return render(request,'home/index.html',{
+                        'error' : True,
+                        'already_registered' : False,
+                        'wrong_credentials' : False,
+                        'password_match' : False,
+                        'not_registered' : False,
+                        'password_not_valid' : True
+                    })
                 email = main_object['email']
                 email = email.lower()
                 user = User.objects.create(name=main_object['txt'],email=email, password=main_object['pswd'])
@@ -137,7 +184,8 @@ def load_up_sign_up(request):
                             'already_registered' : False,
                             'wrong_credentials' : False,
                             'password_match' : True,
-                            'not_registered' : False
+                            'not_registered' : False,
+                            'password_not_valid' : False
                         })
             return render(request,"home/index_profile.html",{
                 'id' : user.id,
@@ -149,7 +197,8 @@ def load_up_sign_up(request):
                     'already_registered' : True,
                     'wrong_credentials' : False,
                     'password_match' : False,
-                    'not_registered' : False
+                    'not_registered' : False,
+                    'password_not_valid' : False
                     })
 
 def search_results(request):
