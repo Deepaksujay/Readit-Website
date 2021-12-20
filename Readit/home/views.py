@@ -92,6 +92,7 @@ def load_up_sign_in(request):
     if request.method == 'POST':
         main_object = request.POST
         user_email = main_object['email']
+        user_email = user_email.lower()
         user_password = main_object['pswd']
         try:
             user = User.objects.get(email = user_email)
