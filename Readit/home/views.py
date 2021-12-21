@@ -265,6 +265,7 @@ def home(request):
         id_no = input_object['id']
         user = User.objects.get(id = int(id_no))
         if input_object['select'] == 'select#@contact@us':
+            feedback = input_object['Message']
             return render(request,'home/contact_us.html',{
                 'user' : user,
                 'id' : id_no,
