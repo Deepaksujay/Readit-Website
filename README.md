@@ -1,4 +1,5 @@
-# Readit an Informatory Website
+# Readit 
+##An Informatory Website
 Repositry of Lab project of OOP Course i.e preparation of Website.
 Steps to run server on your local machine and experience **READIT**:
 1. Download this repo into your machine and open terminal in this folder
